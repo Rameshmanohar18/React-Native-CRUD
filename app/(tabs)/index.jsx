@@ -11,20 +11,12 @@ import {
   View,
 } from 'react-native';
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { ThemedText } from '../../components/themed-text';
+import { ThemedView } from '../../components/themed-view';
+import { Colors } from '../../constants/theme';
+import { useColorScheme } from '../../hooks/use-color-scheme';
 
-type AdminUser = {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  isActive: boolean;
-};
-
-const INITIAL_ADMINS: AdminUser[] = [
+const INITIAL_ADMINS = [
   {
     id: '1',
     name: 'Ramesh Kumar',
@@ -55,17 +47,15 @@ const EMPTY_FORM = {
   isActive: true,
 };
 
-type FilterValue = 'all' | 'active' | 'inactive';
-
 export default function AdminCrudScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const palette = Colors[colorScheme];
 
-  const [admins, setAdmins] = useState<AdminUser[]>(INITIAL_ADMINS);
+  const [admins, setAdmins] = useState(INITIAL_ADMINS);
   const [form, setForm] = useState(EMPTY_FORM);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState(null);
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState<FilterValue>('all');
+  const [filter, setFilter] = useState('all');
   const [error, setError] = useState('');
 
   const editingAdmin = admins.find((admin) => admin.id === editingId);
@@ -154,7 +144,7 @@ export default function AdminCrudScreen() {
     resetForm();
   };
 
-  const handleEdit = (admin: AdminUser) => {
+  const handleEdit = (admin) => {
     setEditingId(admin.id);
     setForm({
       name: admin.name,
@@ -165,7 +155,7 @@ export default function AdminCrudScreen() {
     setError('');
   };
 
-  const deleteAdmin = (adminId: string) => {
+  const deleteAdmin = (adminId) => {
     setAdmins((currentAdmins) => currentAdmins.filter((admin) => admin.id !== adminId));
 
     if (editingId === adminId) {
@@ -173,7 +163,7 @@ export default function AdminCrudScreen() {
     }
   };
 
-  const handleDelete = (admin: AdminUser) => {
+  const handleDelete = (admin) => {
     if (Platform.OS === 'web') {
       deleteAdmin(admin.id);
       return;
@@ -281,7 +271,7 @@ export default function AdminCrudScreen() {
             />
 
             <View style={styles.filterRow}>
-              {(['all', 'active', 'inactive'] as FilterValue[]).map((item) => {
+              {['all', 'active', 'inactive'].map((item) => {
                 const selected = filter === item;
 
                 return (
