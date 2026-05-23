@@ -1,13 +1,19 @@
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '../../src/components/navigation/haptic-tab';
 import { IconSymbol } from '../../src/components/ui/icon-symbol';
 import { Colors } from '../../src/constants/theme';
+import { useAuth } from '../../src/features/auth/context/auth-context';
 import { useColorScheme } from '../../src/hooks/use-color-scheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Redirect href="/login" />;
+  }
 
   return (
     <Tabs
@@ -27,7 +33,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Admins',
+          title: 'Users',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />

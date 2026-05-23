@@ -13,6 +13,7 @@ import {
 
 import { ThemedText } from '../../../components/common/themed-text';
 import { ThemedView } from '../../../components/common/themed-view';
+import { useAuth } from '../../auth/context/auth-context';
 import { EMPTY_ADMIN_FORM, INITIAL_ADMINS } from '../data/admin-data';
 
 const AMAZON_COLORS = {
@@ -33,6 +34,7 @@ const AMAZON_COLORS = {
 };
 
 export default function AdminCrudScreen() {
+  const { currentAdmin, logout } = useAuth();
   const [admins, setAdmins] = useState(INITIAL_ADMINS);
   const [form, setForm] = useState(EMPTY_ADMIN_FORM);
   const [editingId, setEditingId] = useState(null);
@@ -81,7 +83,7 @@ export default function AdminCrudScreen() {
     );
 
     if (emailExists) {
-      return 'This email is already used by another admin.';
+      return 'This email is already used by another user.';
     }
 
     return '';
@@ -151,7 +153,7 @@ export default function AdminCrudScreen() {
       return;
     }
 
-    Alert.alert('Delete admin?', `Remove ${admin.name} from the admin list.`, [
+    Alert.alert('Delete user?', `Remove ${admin.name} from the user list.`, [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Delete',
@@ -171,11 +173,23 @@ export default function AdminCrudScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
-            <ThemedText lightColor="#FFFFFF" darkColor="#FFFFFF" type="title" style={styles.title}>
-              Admin Console
-            </ThemedText>
-            <ThemedText lightColor="#D5DBDB" darkColor="#D5DBDB" style={styles.subtitle}>
-              Manage users, roles, and access status from one place.
+            <View style={styles.headerTop}>
+              <View style={styles.headerTextBlock}>
+                <ThemedText lightColor="#FFFFFF" darkColor="#FFFFFF" type="title" style={styles.title}>
+                  User Console
+                </ThemedText>
+                <ThemedText lightColor="#D5DBDB" darkColor="#D5DBDB" style={styles.subtitle}>
+                  Manage users, roles, and access status from one place.
+                </ThemedText>
+              </View>
+              <Pressable accessibilityRole="button" style={styles.logoutButton} onPress={logout}>
+                <ThemedText lightColor="#FFFFFF" darkColor="#FFFFFF" type="defaultSemiBold" style={styles.logoutText}>
+                  Logout
+                </ThemedText>
+              </Pressable>
+            </View>
+            <ThemedText lightColor="#FF9900" darkColor="#FF9900" type="defaultSemiBold" style={styles.sessionText}>
+              Signed in as {currentAdmin?.name ?? 'Admin'}
             </ThemedText>
             <View style={styles.summaryRow}>
               <View style={styles.summaryItem}>
@@ -207,7 +221,7 @@ export default function AdminCrudScreen() {
 
           <View style={styles.panel}>
             <ThemedText lightColor="#111111" darkColor="#111111" type="subtitle">
-              {isEditing ? 'Update admin' : 'Create admin'}
+              {isEditing ? 'Update user' : 'Create user'}
             </ThemedText>
 
             <TextInput
@@ -240,7 +254,7 @@ export default function AdminCrudScreen() {
                   Active status
                 </ThemedText>
                 <ThemedText lightColor={AMAZON_COLORS.muted} darkColor={AMAZON_COLORS.muted} style={styles.helperText}>
-                  {form.isActive ? 'This admin can access the app.' : 'Access is paused.'}
+                  {form.isActive ? 'This user can access the app.' : 'Access is paused.'}
                 </ThemedText>
               </View>
               <Switch
@@ -279,7 +293,7 @@ export default function AdminCrudScreen() {
           <View style={styles.tools}>
             <TextInput
               autoCapitalize="none"
-              placeholder="Search admins"
+              placeholder="Search users"
               placeholderTextColor={AMAZON_COLORS.muted}
               style={styles.searchInput}
               value={search}
@@ -317,7 +331,7 @@ export default function AdminCrudScreen() {
 
           <View style={styles.listHeader}>
             <ThemedText lightColor="#111111" darkColor="#FFFFFF" type="subtitle">
-              Admins
+              Users
             </ThemedText>
             <ThemedText lightColor={AMAZON_COLORS.muted} darkColor="#D5DBDB" style={styles.countText}>
               {visibleAdmins.length} shown
@@ -383,10 +397,10 @@ export default function AdminCrudScreen() {
             ) : (
               <View style={styles.emptyState}>
                 <ThemedText lightColor="#111111" darkColor="#111111" type="defaultSemiBold">
-                  No admins found
+                  No users found
                 </ThemedText>
                 <ThemedText lightColor={AMAZON_COLORS.muted} darkColor={AMAZON_COLORS.muted} style={styles.helperText}>
-                  Try changing your search or filter, or create a new admin.
+                  Try changing your search or filter, or create a new user.
                 </ThemedText>
               </View>
             )}
@@ -420,12 +434,39 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 58,
   },
+  headerTop: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    gap: 12,
+    justifyContent: 'space-between',
+  },
+  headerTextBlock: {
+    flex: 1,
+    gap: 8,
+  },
   title: {
     lineHeight: 38,
   },
   subtitle: {
     fontSize: 15,
     lineHeight: 21,
+  },
+  sessionText: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  logoutButton: {
+    alignItems: 'center',
+    backgroundColor: AMAZON_COLORS.navySoft,
+    borderColor: '#3A4553',
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 38,
+    paddingHorizontal: 12,
+  },
+  logoutText: {
+    fontSize: 14,
   },
   summaryRow: {
     flexDirection: 'row',
