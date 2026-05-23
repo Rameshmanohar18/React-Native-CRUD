@@ -2,6 +2,18 @@
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+## Project structure
+
+This project uses a production-style layout:
+
+- `app/` contains only Expo Router routes and layouts.
+- `src/features/` contains app features such as the Admin CRUD module.
+- `src/components/` contains reusable UI and navigation components.
+- `src/hooks/` contains shared hooks.
+- `src/constants/` contains theme and app constants.
+
+See `PROJECT_STRUCTURE.md` for the full folder map.
+
 ## Get started
 
 1. Install dependencies
@@ -14,6 +26,12 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
    ```bash
    npx expo start
+   ```
+
+3. Build for web
+
+   ```bash
+   npm run build
    ```
 
 In the output, you'll find options to open the app in a
