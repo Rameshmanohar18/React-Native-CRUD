@@ -10,6 +10,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 const MAPPING = {
   'house.fill': 'home',
   'paperplane.fill': 'send',
+  'book.fill': 'menu-book',
+  'slider.horizontal.3': 'tune',
+  'square.grid.2x2.fill': 'dashboard',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
 };
